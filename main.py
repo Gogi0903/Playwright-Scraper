@@ -8,10 +8,6 @@ def save(item_to_save, actual_page):
         json.dump(item_to_save, f)
 
 
-def string(encoded_string):
-    return encoded_string.encode("utf-8").decode('unicode_escape').encode('ascii', 'ignore')
-
-
 def quotes(actual_page):
     # returns a list containing the elements for each quote
     quotes_to_scrape = actual_page.locator('div.col-md-8').last.locator('div.quote')   # selects all quotes
@@ -34,6 +30,13 @@ def quotes(actual_page):
     return quotes_list
 
 
+def scrape_page(actual_page_no):
+    print(f'Scraping {actual_page_no}...')
+    q = quotes(actual_page=page)
+    save(item_to_save=q, actual_page=actual_page_no)
+    print(f'...page {actual_page_no} has been scraped.')
+
+
 with sync_playwright() as playwright:
 
     browser = playwright.chromium.launch()
@@ -44,12 +47,11 @@ with sync_playwright() as playwright:
     next_btn = page.locator('nav ul.pager a').get_by_text('Next ')
 
     while not next_btn.count() == 0:
-        print(f'Scraping {page_no}...')
-        q = quotes(actual_page=page)
-        save(item_to_save=q, actual_page=page_no)
+        scrape_page(page_no)
         next_btn.click()
-        print(f'...page {page_no} has been scraped.')
         page_no += 1
+
+    scrape_page(page_no)
 
     print('Every page from the site has been scraped. Please check the project folder for the saved data.')
     page.close()
