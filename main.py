@@ -33,8 +33,13 @@ def quotes(actual_page):
 def scrape_page(actual_page_no):
     # scrapes the actual page
     print(f'Scraping {actual_page_no}...')
-    q = quotes(actual_page=page)
-    save(item_to_save=q, actual_page=actual_page_no)
+    q = quotes(
+        actual_page=page
+    )
+    save(
+        item_to_save=q,
+        actual_page=actual_page_no
+    )
     print(f'...page {actual_page_no} has been scraped.')
 
 
@@ -48,11 +53,15 @@ with sync_playwright() as playwright:
     next_btn = page.locator('nav ul.pager a').get_by_text('Next ')
 
     while not next_btn.count() == 0:
-        scrape_page(page_no)
+        scrape_page(
+            actual_page_no=page_no
+        )
         next_btn.click()
         page_no += 1
 
-    scrape_page(page_no)
+    scrape_page(
+        actual_page_no=page_no
+    )
 
     print('Every page from the site has been scraped. Please check the project folder for the saved data.')
     page.close()
