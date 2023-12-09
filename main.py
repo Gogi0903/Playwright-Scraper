@@ -10,16 +10,16 @@ def save(item_to_save, actual_page):
 
 def quotes(actual_page):
     # returns a list containing the elements for each quote
-    quotes_to_scrape = actual_page.locator('div.col-md-8').last.locator('div.quote')   # selects all quotes
+    quotes_to_scrape = actual_page.locator('div.col-md-8').last.locator('div.quote')    # selects all quotes
     quotes_list = list()
 
-    for quote in quotes_to_scrape.all():                                        # iterate through the quotes' data
-        text = quote.locator('span.text').inner_text()                         # quote's text
-        author = quote.locator('small.author').inner_text()                     # quote's author
+    for quote in quotes_to_scrape.all():                                            # iterate through the quotes' data
+        text = quote.locator('span.text').inner_text()                              # quote's text
+        author = quote.locator('small.author').inner_text()                         # quote's author
 
         tags_box = quote.locator('div.tags')
         tags_list = [tag.inner_text().split(' ')[1:] for tag in tags_box.all()]
-        tags = tags_list[0]                                                     # quote's tags (in list)
+        tags = tags_list[0]                                                         # quote's tags (in list)
 
         quotes_to_list = dict()
         quotes_to_list['author'] = author
@@ -31,6 +31,7 @@ def quotes(actual_page):
 
 
 def scrape_page(actual_page_no):
+    # scrapes the actual page
     print(f'Scraping {actual_page_no}...')
     q = quotes(actual_page=page)
     save(item_to_save=q, actual_page=actual_page_no)
