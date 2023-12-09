@@ -33,11 +33,11 @@ def quotes(actual_page):
 def scrape_page(actual_page_no):
     # scrapes the actual page
     print(f'Scraping {actual_page_no}...')
-    q = quotes(
+    quotes_to_save = quotes(
         actual_page=page
     )
     save(
-        item_to_save=q,
+        item_to_save=quotes_to_save,
         actual_page=actual_page_no
     )
     print(f'...page {actual_page_no} has been scraped.')
