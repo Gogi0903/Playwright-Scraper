@@ -8,19 +8,10 @@ def save(item_to_save, actual_page):
         json.dump(item_to_save, f)
 
 
-with sync_playwright() as playwright:
-    browser = playwright.chromium.launch(
-        headless=False,
-        slow_mo=500
-    )
-
-    page_no = 1
-    page = browser.new_page()
-    page.goto(f'https://quotes.toscrape.com/')
-
+def quotes():
+    # returns the elements per quote
     quotes_to_scrape = page.locator('div.col-md-8').last.locator('div.quote')   # selects all quotes
-
-    quotes = list()
+    quotes_list = list()
 
     for quote in quotes_to_scrape.all():                                        # iterate through the quotes
         text = quote.locator('span.text').inner_text()                          # quote's text
@@ -34,8 +25,23 @@ with sync_playwright() as playwright:
         quotes_to_list['author'] = author
         quotes_to_list['tags'] = tags
         quotes_to_list['quote'] = text
-        quotes.append(quotes_to_list)
+        quotes_list.append(quotes_to_list)
 
-    save(item_to_save=quotes, actual_page=page_no)
+    return quotes_list
+
+
+with sync_playwright() as playwright:
+    browser = playwright.chromium.launch(
+        headless=False,
+        slow_mo=500
+    )
+
+    page_no = 1
+    page = browser.new_page()
+    page.goto('https://quotes.toscrape.com/page/1/')
+
+    q = quotes()
+
+    save(item_to_save=q, actual_page=page_no)
 
     page.close()
