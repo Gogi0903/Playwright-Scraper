@@ -38,7 +38,4 @@ with sync_playwright() as playwright:
 
     save(item_to_save=quotes, actual_page=page_no)
 
-    page_no += 1
-    page.goto(f'https://quotes.toscrape.com/page/{page_no}/')
-
     page.close()
